@@ -18,11 +18,37 @@ class DoublyLinkedList:
         self.tail.next = None
 
 
+    def __repr__(self):
+        if self.nodeCount == 0:
+            return 'LinkedList: empty'
+
+        s = ''
+        curr = self.head
+        while curr.next.next:
+            curr = curr.next
+            s += repr(curr.data)
+            if curr.next.next is not None:
+                s += ' -> '
+        return s
+
+
+    def getLength(self):
+        return self.nodeCount
+
+
     def traverse(self):
         result = []
         curr = self.head
         while curr.next.next:
             curr = curr.next
+            result.append(curr.data)
+        return result
+
+    def reverse(self):
+        result = []
+        curr = self.tail
+        while curr.prev.prev:
+            curr = curr.prev
             result.append(curr.data)
         return result
 
@@ -63,37 +89,4 @@ class DoublyLinkedList:
 
         prev = self.getAt(pos - 1)
         return self.insertAfter(prev, newNode)
-
-
-    def popAfter(self, prev):
-        curr = prev.next
-        prev.next = curr.next
-        curr.next.prev = prev
-        self.nodeCount -= 1
-        return curr.data
-
-
-    def popBefore(self, next):
-        curr = next.prev
-        next.prev = curr.prev
-        curr.prev.next =next
-        self.nodeCount -= 1
-        return curr.data
-
-    def popAt(self, pos):
-        if pos < 1 or pos > self.nodeCount:
-            raise IndexError
-        prev = self.getAt(pos - 1)    
-        return self.popAfter(prev)
-
-    def concat(self, L): 
-
-        L1_last = self.tail.prev
-        L2_first = L.head.next
-
-        L1_last.next = L2_first
-        L2_first.prev = L1_last
-
-        self.tail = L.tail
-
-        self.nodeCount = self.nodeCount + L.nodeCount
+    
